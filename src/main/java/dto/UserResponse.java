@@ -1,6 +1,6 @@
 package dto;
 
-import org.apache.catalina.User;
+import model.User;
 
 public record UserResponse(long id, String nome, String email) {
     public static UserResponse from (User user){

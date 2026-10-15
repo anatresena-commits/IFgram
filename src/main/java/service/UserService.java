@@ -3,7 +3,7 @@ package service;
 import dto.UserRequest;
 import dto.UserResponse;
 import jakarta.transaction.Transactional;
-import org.apache.catalina.User;
+import model.User;
 import org.springframework.stereotype.Service;
 import repository.UserRepository;
 
@@ -22,9 +22,11 @@ public class UserService {
         if (repository.existsByEmail(request.email())) {
             throw new Exception(request.email());
         }
-        User salvo;
-        salvo = repository.save(new User(request.nome(), request.email()));
+        User salvo = repository.save(new User(request.nome(), request.email()));
         return UserResponse.from(salvo);
+    }
+
+    public UserResponse atualizarUsuario(UserRequest request) {
     }
 }
 
