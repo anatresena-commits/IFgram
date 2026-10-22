@@ -1,6 +1,6 @@
-package dto;
+package br.edu.ifpb.demo.dto;
 
-import model.User;
+import br.edu.ifpb.demo.model.User;
 
 public record UserResponse(long id, String nome, String email) {
     public static UserResponse from (User user){

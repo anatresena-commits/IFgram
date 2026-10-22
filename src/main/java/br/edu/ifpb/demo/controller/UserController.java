@@ -1,13 +1,12 @@
-package controller;
+package br.edu.ifpb.demo.controller;
 
-import dto.UserRequest;
-import dto.UserResponse;
+import br.edu.ifpb.demo.dto.UserRequest;
+import br.edu.ifpb.demo.dto.UserResponse;
 import org.springframework.web.bind.annotation.*;
-import service.UserService;
+import br.edu.ifpb.demo.service.UserService;
 
 @RestController
 @RequestMapping("user")
-
 public class UserController {
  public final UserService service;
 

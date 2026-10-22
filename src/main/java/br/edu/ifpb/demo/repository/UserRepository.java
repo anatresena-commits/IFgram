@@ -1,6 +1,6 @@
-package repository;
+package br.edu.ifpb.demo.repository;
 
-import model.User;
+import br.edu.ifpb.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

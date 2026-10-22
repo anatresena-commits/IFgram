@@ -1,11 +1,11 @@
-package service;
+package br.edu.ifpb.demo.service;
 
-import dto.UserRequest;
-import dto.UserResponse;
+import br.edu.ifpb.demo.dto.UserRequest;
+import br.edu.ifpb.demo.dto.UserResponse;
 import jakarta.transaction.Transactional;
-import model.User;
+import br.edu.ifpb.demo.model.User;
 import org.springframework.stereotype.Service;
-import repository.UserRepository;
+import br.edu.ifpb.demo.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;

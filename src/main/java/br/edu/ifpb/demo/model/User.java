@@ -1,4 +1,4 @@
-package model;
+package br.edu.ifpb.demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

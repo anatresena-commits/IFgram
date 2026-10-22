@@ -1,4 +1,4 @@
-package dto;
+package br.edu.ifpb.demo.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
