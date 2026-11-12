@@ -1,21 +1,23 @@
+
 package br.edu.ifpb.demo.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import javax.swing.*;
+public record UserRequest(
 
-public record UserRequest (
+        @NotBlank
         @Email
         String email,
+
+        @NotBlank
         @Size(min = 3)
-        @NotNull
         String nome,
 
+        @NotBlank
         @Size(min = 4)
-        @NotNull
-        Spring senha
+        String senha
+
 ) {
 }
-

@@ -1,37 +1,43 @@
+
 package br.edu.ifpb.demo.controller;
 
 import br.edu.ifpb.demo.dto.UserRequest;
 import br.edu.ifpb.demo.dto.UserResponse;
-import org.springframework.web.bind.annotation.*;
 import br.edu.ifpb.demo.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
- public final UserService service;
 
-    public UserController(UserService service){
+    private final UserService service;
+
+    public UserController(UserService service) {
         this.service = service;
     }
-    @GetMapping
-    public String getUser() {
-        return "chamei o endpoint como um GET!";
 
+    @GetMapping
+    public List<UserResponse> buscarTodos() {
+        return service.buscarTodosUsuarios();
     }
 
     @PostMapping
-    public String postUser(){
-        return "chamei o endpoint como um POST!";
+    public UserResponse cadastrar(
+            @Valid @RequestBody UserRequest request) {
+        return service.cria(request);
     }
 
     @PutMapping
-public UserResponse putUser (UserRequest request) throws Exception {
-        UserResponse userResponse = service.atualizarUsuario(request);
-        return userResponse;
+    public UserResponse atualizar(
+            @Valid @RequestBody UserRequest request) {
+        return service.atualizarUsuario(request);
     }
-    @DeleteMapping
-    public String deleteUser(){
-        return "chamei o endpoint como um DELETE!";
+
+    @DeleteMapping("/{id}")
+    public void deletar(@PathVariable Long id) {
+        service.deletarUsuario(id);
     }
 }
-

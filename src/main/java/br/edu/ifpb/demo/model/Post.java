@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-        import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "tb_post")
 public class Post {

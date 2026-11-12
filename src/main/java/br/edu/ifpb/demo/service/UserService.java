@@ -1,66 +1,81 @@
+
 package br.edu.ifpb.demo.service;
 
 import br.edu.ifpb.demo.dto.UserRequest;
 import br.edu.ifpb.demo.dto.UserResponse;
-import jakarta.transaction.Transactional;
 import br.edu.ifpb.demo.model.User;
-import org.springframework.stereotype.Service;
 import br.edu.ifpb.demo.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
+
     private final UserRepository repository;
 
-    // injeção de dependêcia pelo construtor
     public UserService(UserRepository repository) {
         this.repository = repository;
     }
 
     @Transactional
-    public UserResponse cria(UserRequest request) throws Exception {
-        // regra de negócios: o e-mail não pode repetir
+    public UserResponse cria(UserRequest request) {
+
         if (repository.existsByEmail(request.email())) {
-            throw new Exception(request.email());
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Este e-mail já está cadastrado."
+            );
         }
-        User salvo = repository.save(new User(request.nome(), request.email()));
+
+        User usuario = new User(
+                request.nome(),
+                request.email(),
+                request.senha()
+        );
+
+        User salvo = repository.save(usuario);
+
         return UserResponse.from(salvo);
     }
-    public List<UserResponse> buscarTodosUsuarios(){
-        List<User> listaUsuarios = repository.findAll();
-        List<UserResponse> listaUsuariosResponse = new ArrayList<>();
-        for(User user : listaUsuarios) {
-            UserResponse userReponse = new UserResponse(
-                    user.getId(),
-                    user.getNome(),
-                    user.getEmail()
+
+    public List<UserResponse> buscarTodosUsuarios() {
+        return repository.findAll()
+                .stream()
+                .map(UserResponse::from)
+                .toList();
+    }
+
+    @Transactional
+    public UserResponse atualizarUsuario(UserRequest request) {
+
+        User usuario = repository.findByEmail(request.email())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuário não encontrado."
+                ));
+
+        usuario.setNome(request.nome());
+        usuario.setSenha(request.senha());
+
+        User atualizado = repository.save(usuario);
+
+        return UserResponse.from(atualizado);
+    }
+
+    @Transactional
+    public void deletarUsuario(Long id) {
+
+        if (!repository.existsById(id)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Usuário não encontrado."
             );
-            listaUsuariosResponse.add(userReponse);
         }
-        return listaUsuariosResponse;
-    }
 
-    public UserResponse atualizarUsuario(UserRequest request) throws Exception{
-        Optional<User> usuario = repository.findByEmail(request.email());
-        if (usuario.isEmpty()){
-            throw new Exception("usuário não existe na base de dados.");
-        }
-        User usuarioSalvo = usuario.get();
-        usuarioSalvo.setNome(request.nome());
-        repository.save(usuarioSalvo);
-
-        return UserResponse.from(usuarioSalvo);
-    }
-    public void deletarusuario (UserRequest request) throws  Exception {
-        Optional <User> usuario = repository.findByEmail(request.email());
-        if(usuario.isEmpty()) {
-            throw new Exception("Usuário não encontrado!");
-        }
-        User usuarioDeletar = usuario.get();
+        repository.deleteById(id);
     }
 }
-
-

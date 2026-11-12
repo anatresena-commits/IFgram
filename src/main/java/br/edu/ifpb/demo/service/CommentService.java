@@ -63,7 +63,15 @@ public class CommentService {
         return CommentResponse.from(salvo);
     }
 
+
     public List<CommentResponse> listarPorPost(Long postId) {
+
+        if (!postRepository.existsById(postId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Post não encontrado."
+            );
+        }
 
         return commentRepository
                 .findByPostIdOrderByCriadoEmAsc(postId)
@@ -71,6 +79,7 @@ public class CommentService {
                 .map(CommentResponse::from)
                 .toList();
     }
+
 
     @Transactional
     public void deletar(Long id) {
